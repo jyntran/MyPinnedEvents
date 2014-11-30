@@ -1,0 +1,98 @@
+#j44trana4 {
+	overflow: hidden;
+}
+
+#j44trana4_background {
+	background-color: black;
+}
+
+/*	Navigation	*/
+
+#j44trana4 .bar {
+	display:block;
+	width: 100%;
+	padding: 5px;
+	background-color: black;
+	color: white;	
+}
+
+#j44trana4_head {
+	top: 0;
+	border-bottom: 2px solid yellow;
+}
+
+#j44trana4_foot {
+	bottom: 0;
+	border-top: 2px solid yellow;
+}
+
+#j44trana4_nav1, #j44trana4_nav2, #j44trana4_nav3 {
+	margin: auto;
+	width: 100%;
+	color: black;	
+	text-align: center;
+}
+
+#j44trana4 .nav a {
+	color: white;
+	background: black;
+}
+
+#j44trana4 .nav a:hover {
+	color: #999999;
+}
+
+#j44trana4 #main {
+	display: block;
+	height: 400px;
+	padding: 5px;
+	background-color: white;
+	overflow: auto;
+}
+
+#j44trana4 #main a {
+	color: #999999;
+}
+
+/*	Individual entries	*/
+
+.j44trana4_entry {
+	padding: 5px;
+	border-bottom: 1px solid #333333;
+}
+
+.j44trana4_entry_title {
+}
+
+.j44trana4_entry_info {
+	clear: both;
+}
+
+.j44trana4_icon {
+	width: 32px;
+	height: 32px;
+	margin: 3px;
+	float: left;
+}
+
+.j44trana4_unpinnedIcon {
+	background: url("img/unpinned32.png") no-repeat;
+}
+
+.j44trana4_pinnedIcon {
+	background: url("img/pinned32.png") no-repeat;
+}
+
+.j44trana4_unpinnedIcon a, .j44trana4_pinnedIcon a {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+/* Alert */
+
+#j44trana4_alert {
+	position: absolute;
+	bottom: 75px;
+	width: 80%;
+}

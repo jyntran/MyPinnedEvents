@@ -1,0 +1,106 @@
+baseHtml
+@@@@
+<div id='j44trana4_head' class='bar'>
+  <h2 id='j44trana4_nav_title'></h2>
+<div id="j44trana4_alert"></div>
+</div>
+<div id='main'>
+  <div id='j44trana4_pinned'></div>
+  <div id='j44trana4_events'></div>
+  <div id='j44trana4_sessions'></div>
+  <div id='j44trana4_credits'></div>
+</div>
+<div id='j44trana4_foot' class='bar'>
+  <div id='j44trana4_nav' class='nav'>
+    <div class="dropup">
+    <ul class="nav nav-pills">
+     <li><a id="j44trana4_nav1_home" href="#" aria-expanded="false">Home</a></li>
+     <li role="presentation" class="dropdown">
+       <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
+      Pin New <span class="caret"></span></a>
+       <ul class="dropdown-menu" role="menu">
+     <li><a id="j44trana4_nav1_event" href="#" aria-expanded="false">Event</a></li>
+     <li><a id="j44trana4_nav1_session" href="#" aria-expanded="false">Employer Info Session</a></li>
+    </ul>
+   </li>
+   <li><a id="j44trana4_nav_credits" href="#" aria-expanded="false">About Widget</a></li>
+  </ul>
+ </div>
+</div>
+</div>
+
+@@@@
+pinned
+@@@@
+{{#list}}
+	<div class='j44trana4_entry j44trana4_pinned' id=''j44trana4_pinned{{id}}'>
+		<a  title="Unpin this event" id='p{{id}}' class='j44trana4_icon j44trana4_pinnedIcon' href="#" aria-expanded="false"></a>
+		<div class='j44trana4_entry_title'><b>{{{title}}}</b></div>
+<!--		<div class='j44trana4_entry_info'><p>{{#times}}Date: {{date}}<br>Start: {{start}}<br>End: {{end}}<br>{{/times}}</p><p><a href="{{link}}">More information</a></p></div>
+-->
+		<div class='j44trana4_entry_info'><p>{{#times}}Date: {{date}}<br>Time: {{time}}<br>{{/times}}</p><p><a href="{{link}}">Website</a></p></div>
+	</div>
+{{/list}}
+
+@@@@
+pinnedEmpty
+@@@@
+<h3>No pinned events!<br>Why not add a few?</h3>
+
+
+@@@@
+events
+@@@@
+{{#data}}
+	<div class='j44trana4_entry j44trana4_event' id='j44trana4_event{{id}}'>
+		<a  title="Pin this event" id='e{{id}}' class="j44trana4_icon j44trana4_unpinnedIcon" href="#" aria-expanded="false"></a>
+		<div class='j44trana4_entry_title'><b>{{{title}}}</b></div>
+		<div class='j44trana4_entry_info'><p>{{#times}}Start: {{start}}<br>End: {{end}}<br>{{/times}}</p><p><a href="{{link}}">Website</a></p></div>
+	</div>
+{{/data}}
+
+@@@@
+sessions
+@@@@
+{{#data}}
+	<div class='j44trana4_entry j44trana4_session' id='j44trana4_session{{id}}'>
+		<a  title="Pin this event" id='s{{id}}' class="j44trana4_icon j44trana4_unpinnedIcon" href="#" aria-expanded="false"></a>
+		<div class='j44trana4_entry_title'><b>{{employer}} Info Session</b></div>
+		<div class='j44trana4_entry_info'><p>Date: {{date}}<br>Time: {{start_time}}-{{end_time}}</p><p><a href="{{website}}">Website</a></p></div>
+	</div>
+{{/data}}
+
+@@@@
+credits
+@@@@
+<p><i>My Pinned Events</i> was created for the final project of CS 349 by Jen Tran.</p>
+<h4>Attribution</h4>
+<p>Safety Pin designed by <a href="http://www.thenounproject.com/MisterPixel">Mister Pixel</a> from the <a href="http://www.thenounproject.com">Noun Project</a></p>
+
+
+@@@@
+error
+@@@@
+<p>ERROR: Data cannot be loaded.</p>
+
+
+@@@@
+alertAdded
+@@@@
+<div id="j44trana4_alertAdded" class="alert alert-success alert-dismissible" role="alert">
+<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+Event has been pinned.</div>
+
+@@@@
+alertAlreadyAdded
+@@@@
+<div id="j44trana4_alertAlreadyAdded" class="alert alert-danger alert-dismissible" role="alert">
+<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+This event has already been pinned!</div>
+
+@@@@
+alertRemoved
+@@@@
+<div id="j44trana4_alertRemoved" class="alert alert-success alert-dismissible" role="alert">
+<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+Event has been unpinned.</div>
