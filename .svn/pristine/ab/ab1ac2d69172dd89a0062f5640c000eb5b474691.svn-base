@@ -1,0 +1,80 @@
+baseHtml
+@@@@
+<div id='j44trana4_head' class='bar'>
+<h2 id='j44trana4_nav_title'></h2>
+<div id='j44trana4_nav1'>
+<button id ="j44trana4_nav1_add" type="button">+</button>
+<button id="j44trana4_nav1_cal" type="button">Cal</button>
+</div>
+<div id='j44trana4_nav2'>
+<button id='j44trana4_nav2_back' type="button">Back</button>
+</div>
+</div>
+<div id='main'>
+<div id='j44trana4_pinned'></div>
+<div id='j44trana4_events'></div>
+<div id='j44trana4_credits'></div>
+</div>
+<div id='j44trana4_foot' class='bar'>
+<button id='j44trana4_nav_credits' type="button" class="btn btn-link">Credits</button>
+</div>
+@@@@
+pinned
+@@@@
+
+	<div>pinned stuff
+		<div class='j44trana4_pinnedIcon'><a href="" title="Unpin this event" class="j44trana4_unpinLink"></a></div>
+		<div><h4>{{event title}}</h4><p>{{site_name}}<br>{{#times}}Start: {{start}}<br>End: {{end}}<br>{{/times}}<p></div>
+	</div>
+
+
+<!--
+<div>
+	<div class='pinnedIcon'><a href="Unpin"></a>
+	<div><h4>Pinned event</h4><p>Monday, Sept 10 2014<br>11:00AM-12:00PM<br>Tatham Centre<p></div>
+</div>
+-->
+
+@@@@
+events
+@@@@
+{{#data}}
+	<div>
+		<div class='j44trana4_unpinnedIcon'><a href="" title="Pin this event" class="j44trana4_pinLink"></a></div>
+		<div><h4>{{title}}</h4><p>{{site_name}}<br>{{#times}}Start: {{start}}<br>End: {{end}}<br>{{/times}}<p></div>
+	</div>
+{{/data}}
+
+@@@@
+sessions
+@@@@
+{{#data}}
+	<div>
+		<div class='unpinnedIcon'><a href="" title="Pin this event">+</a></div>
+		<div><h4>{{employer}} Info Session</h4><p>{{location}}<br>Start: {{start_time}}<br>End: {{end_time}}{{/times}}<p></div>
+	</div>
+{{/data}}
+
+@@@@
+courses
+@@@@
+<ul>{{#terms}}
+    <li> {{term}} 
+         <ul>{{#courses}}
+             <li>{{courseId}} {{subjectCode}} {{catalog}}
+             {{/courses}}
+        </ul>
+    </li>
+    {{/terms}}
+</ul>
+
+@@@@
+error
+@@@@
+<p>ERROR: This event conflicts with your classes!</p>
+
+
+@@@@
+credits
+@@@@
+Safety Pin designed by <a href="http://www.thenounproject.com/MisterPixel">Mister Pixel</a> from the <a href="http://www.thenounproject.com">Noun Project</a>

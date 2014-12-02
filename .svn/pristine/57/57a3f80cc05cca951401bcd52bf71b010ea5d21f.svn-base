@@ -1,0 +1,103 @@
+function j44trana4(userid, htmlId) {
+  "use strict";
+  var templates = {};
+
+  var model = {
+    views: [],
+	pinned: {},
+    events: {},
+	sessions: {},
+
+    /**
+     * Add a new view to be notified when the model changes.
+     */
+    addView: function (view) {
+      this.views.push(view);
+      view("");
+    },
+
+    /**
+     * Update all of the views that are observing us.
+     */
+    updateViews: function (msg) {
+      var i = 0;
+      for (i = 0; i < this.views.length; i++) {
+        this.views[i](msg);
+      }
+    },
+
+    loadEventData: function () {
+      var that = this;
+      // getJSON can fail silently.  It may be better (and only slightly more work)
+      // to use $.ajax -- or write your own version of getJSON that does not fail silently.
+      var url = "https://api.uwaterloo.ca/v2/events.json?key=6ed72651a0cadfd1fe73cc2048bb050e";
+      $.getJSON(url,
+        function (d) {
+          if (d.meta.status === 200) {
+            that.events = "test"; //d.data;
+            that.updateViews("events");
+          } else {
+            that.events = {};
+            that.updateViews("error");
+            console.log("Failed to read event data." + JSON.stringify(d.meta));
+          }
+        }).error(function() { throw "loadEventData failed to load from " + url});
+    }
+ };
+
+/*
+    loadSessionData: function () {
+      var that = this;
+      // getJSON can fail silently.  It may be better (and only slightly more work)
+      // to use $.ajax -- or write your own version of getJSON that does not fail silently.
+      var url = "https://api.uwaterloo.ca/v2/resources/infosessions.json?key=6ed72651a0cadfd1fe73cc2048bb050e ";
+      $.getJSON(url,
+        function (d) {
+          if (d.meta.status === 200) {
+            that.sessions = d.data;
+            that.updateViews("sessions");
+          } else {
+            that.sessions = {};
+            that.updateViews("error");
+            console.log("Failed to read session data." + JSON.stringify(d.meta));
+          }
+        }).error(function() { throw "loadSessionData failed to load from " + url});
+    }
+*/
+
+  var pinnedView = {
+    updateView: function (msg) {
+      var t = "";
+      console.log("Msg: " + msg);
+      if (msg === "error") {
+        t = templates.error;
+      } else if (msg === "events") {
+        t = Mustache.render(templates.events, model);
+      }
+      $("#j44trana4_pinned").html(t);
+    },
+
+    initView: function () {
+      console.log("Initializing pinnedView");
+
+      /*
+       * Set the controller for the "Go" button.
+       * Get the subject and catalog from the input fields and
+       * then tell the model to get the corresponding course.
+       */
+      model.addView(pinnedView.updateView);
+    }
+  };
+
+
+  try {
+  portal.loadTemplates("widgets/j44trana4/templates.txt",
+    function (t) {
+      templates = t;
+      $(htmlId).html(templates.baseHtml);
+      pinnedView.initView();
+    });
+  } catch (err) { console.log("caught error: " + err);}
+
+} 
+

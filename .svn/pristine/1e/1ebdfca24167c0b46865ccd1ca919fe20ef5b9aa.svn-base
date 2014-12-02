@@ -1,41 +1,9 @@
 function j44trana4(userid, htmlId) {
-	"use strict";
+  "use strict";
 
-	var templates = {};  
-
-	var model = {
-
-	// Cookies implementation
-	// Source: http://www.quirksmode.org/js/cookies.html
-
-	createCookie: function(name,value,days) {
-		if (days) {
-			var date = new Date();
-			date.setTime(date.getTime()+(days*24*60*60*1000));
-			var expires = "; expires="+date.toGMTString();
-		}
-		else var expires = "";
-		document.cookie = name+"="+value+expires+"; path=/";
-	},
-
-	readCookie: function (name) {
-		var nameEQ = name + "=";
-		var ca = document.cookie.split(';');
-		for(var i=0;i < ca.length;i++) {
-			var c = ca[i];
-			while (c.charAt(0)==' ') c = c.substring(1,c.length);
-			if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-		}
-		return null;
-	},
-
-	eraseCookie: function(name) {
-		createCookie(name,"",-1);
-	},
-
-	
-	// Views
-
+  var templates = {};  
+  var model = {
+    nav: {},
     pinned: {
 	title: "My Pinned Events",
 	list: []
@@ -43,35 +11,49 @@ function j44trana4(userid, htmlId) {
     events: {
         title: "Pin New Event",
 	data: {},
+	list: []
     },
     sessions: {
         title: "Pin New Event",
 	data: {},
+	list: []
+    },
+    courses: {
+        title: "My Courses",	
+	data: {},
+	list: []
     },
     credits: {
-        title: "About Widget",
+        title: "Credits",
+	list: []
     },
     views: [],
     currentView: "pinned",
     title: "My Pinned Events",
 
-	
     // Initialize this object
     init: function () {
       //console.log("initializing model");
       var that = this;
 
-	
-	// Check if user has a cookie to reload pinned list
-	var cookie = this.readCookie("j44trana4_cookie_pinned");
-	//console.log("Cookie found: " + cookie);
-	if (cookie != null) this.pinned = JSON.parse(cookie);
+      // Initialize courses
+
+      $.getJSON("https://" + server + "/api/v1/student/stdCourseDetails/" + userid,
+        function (d) {
+          that.courses.data = d;
+//          that.updateViews("courses");
+        }).fail(function( jqxhr, textStatus, error ) {
+        	var err = textStatus + ", " + error;
+        	console.log( "Request Failed: " + err );
+        });
+
 
       // Initialize events
+
       $.getJSON("https://api.uwaterloo.ca/v2/events.json?key=6ed72651a0cadfd1fe73cc2048bb050e",
         function (d) {
           that.events.data = d;
-          //that.updateViews("events");
+//          that.updateViews("events");
         }).fail(function( jqxhr, textStatus, error ) {
         	var err = textStatus + ", " + error;
         	console.log( "Request Failed: " + err );
@@ -79,58 +61,44 @@ function j44trana4(userid, htmlId) {
 
 
       // Initialize sessions
+
       $.getJSON("https://api.uwaterloo.ca/v2/resources/infosessions.json?key=6ed72651a0cadfd1fe73cc2048bb050e",
         function (d) {
           that.sessions.data = d;
-          //that.updateViews("sessions");
+//          that.updateViews("sessions");
         }).fail(function( jqxhr, textStatus, error ) {
         	var err = textStatus + ", " + error;
         	console.log( "Request Failed: " + err );
         });
+
     },
 	
 	// Gets JSON data from id
+	
 	getById: function(type, id) {
 		var json = null;
 		var data = type.data.data;
-		//console.log(JSON.stringify(data));
-		//console.log(data.data.length);		
+//		console.log(JSON.stringify(data));
+//		console.log(data.data.length);		
 		for (var i=0; i<data.length; i++) {
-			//console.log("json it ["+i+"]: "+data[i]);
+//			console.log("json it ["+i+"]: "+data[i]);
 			if ( data[i].id == id ) return json = data[i];
 		}
 		return json;
 	},
 
-	// Get array of times (for events)
-	getArrayOfTimes: function(times){
-		var result = [];
-		//console.log("test:"+JSON.stringify(times));
-		for (var i=0; i<times.length; i++) {
-			var startString = times[i].start;
-			var endString = times[i].end;
-			var date = startString.substr(0,10);
-			var start = startString.substr(11,5);
-			var end = endString.substr(11,5);
-			if (start === end) {
-				end = "";
-			} else {
-				end = " - " + end;
-			}
-			var time = {"date": date, "time": start + end };
-			result.push(time);			
-		}
-		return result;
-	},
 	
 	// Check if pinned list is empty
+	
 	isPinnedEmpty: function() {
 		return this.pinned.list.length === 0;
 	},
 
 	// Check if event is already pinned
+	
 	alreadyPinned: function(id){	
 		for (var i=0; i<this.pinned.list.length; i++) {
+//			console.log("json it ["+i+"]: "+JSON.stringify(this.pinned.list[i].id));
 			if ( this.pinned.list[i].id == id ){
 				return true;
 			}
@@ -139,68 +107,52 @@ function j44trana4(userid, htmlId) {
 	},
 	
 	// Add event to pinned list
+	
 	addPin: function(type,id) {
+		console.log("add id: " + id);
 		var json = this.getById(type, id);
 		var newPin = {};
 		if (type === model.events) {
-			//console.log(JSON.stringify(json.times));
-			var time = model.getArrayOfTimes(json.times);
 			newPin = {
 				id: json.id,
 				title: json.title,
 				location: json.site_name,
-				times: time,
-				link: json.link
+				times: json.times,
 			};
-			//console.log(newPin.times);
+			console.log("newPin.times");
 		} else if (type === model.sessions) {
-			//console.log(json);
 			newPin = {
 				id: json.id,
 				title: json.employer + " Info Session",
 				location: json.location,
-				times: [{ "date": json.date, "time":  json.start_time + "-" + json.end_time }],
-				link: json.website
+				times: [{ "date": json.date, "start":  json.start_time, "end" : json.end_time }],
 			};
 		}
 		this.pinned.list.push(newPin);
-		this.alertAdded();
 		//console.log("Pinned event.");
 		newPin = "";
-
-		this.createCookie("j44trana4_cookie_pinned",JSON.stringify(this.pinned));
-
 	},
 	
-	// Remove event from pinned list	
+	// Remove event from pinned list
+	
 	removePin: function(id) {
+//		console.log("remove:" +id);
+//		console.log("length:"+this.pinned.list.length);
+//		console.log("Unpinned event");
+//		console.log(this.pinned.list);
+//		console.log("size:" + this.pinned.list.length);
 		for (var i=0; i<this.pinned.list.length; i++) {
+//			console.log("json it ["+i+"]: "+JSON.stringify(this.pinned.list[i].id));
 			if ( this.pinned.list[i].id == id ){
+//				console.log(i);
 				this.pinned.list.splice(i,1);
 			}
 		}
-		this.alertRemoved();
+//		console.log(this.pinned.list);
+//		console.log("size:" + this.pinned.list.length);
 		this.updateViews("pinned");
 	},
-
 	
-	// Call alert of event added
-	alertAdded: function() {
-		var t = Mustache.render(templates.alertAdded, this);
-		$("#j44trana4_alert").html(t);
-	},
-
-	// Call alert of event removed
-	alertRemoved: function() {
-		var t = Mustache.render(templates.alertRemoved, this);
-		$("#j44trana4_alert").html(t);
-	},
-
-	// Call alert of error that warning has already been added
-	alertAlreadyAdded: function() {
-		var t = Mustache.render(templates.alertAlreadyAdded, this);
-		$("#j44trana4_alert").html(t);
-	},
 
 
      /*    
@@ -230,10 +182,31 @@ function j44trana4(userid, htmlId) {
 	        this.views[i]("hide");
       }
     }
-
   };
-/* end model */
+/* END MODEL */
 
+
+/* Courses View */
+
+  var coursesView = {
+    updateView: function (msg) {
+      //console.log("coursesView.updateView with c = " + JSON.stringify(model));
+      if (msg === "courses") {
+        var t = Mustache.render(templates.courses, model.courses.data);
+        $("#j44trana4_courses").html(t);
+		model.title = model.courses.title;
+        $("#j44trana4_nav_title").html(model.title);
+        $("#j44trana4_courses").show();	
+      } else {
+        $("#j44trana4_courses").hide();	
+	  }
+    },
+
+    // Initialize this object
+    init: function () {
+      //console.log("initializing coursesView");
+    }
+  };
 
 /* Navigation Views */
   var navView = {
@@ -241,34 +214,42 @@ function j44trana4(userid, htmlId) {
 	var t ="";
       if (msg === "error") {
         t = templates.error;
-	}
+      } else if (msg === "pinned") {
+      $("#j44trana4_nav2").hide();
+      $("#j44trana4_nav1").show();
+      } else {
+      $("#j44trana4_nav1").hide();
+      $("#j44trana4_nav2").show();
+      }
       $("#j44trana4_nav_title").html(model.title);
+
     },
 
     init: function () {
       //console.log("Initializing courseView");
+      model.addView(navView.updateView);
 
       $("#j44trana4_nav_title").html(model.pinned.title);
       $("#j44trana4_nav1").show();
       $("#j44trana4_nav2").hide();
 
-      $("#j44trana4_nav1_home").click(function () {
-        //console.log("Home clicked");
-		model.currentView = "pinned";
-		model.hideViews();
-		model.updateViews("pinned");
-      });
-      $("#j44trana4_nav1_event").click(function () {
-        //console.log("Add clicked");
-		model.currentView = "events";
-		model.hideViews();
-		model.updateViews("events");
-      });
-      $("#j44trana4_nav1_session").click(function () {
+      $("#j44trana4_nav1_add").click(function () {
         //console.log("Add clicked");
 		model.currentView = "sessions";
 		model.hideViews();
 		model.updateViews("sessions");
+      });
+      $("#j44trana4_nav1_cal").click(function () {
+        //console.log("Cal clicked");
+		model.currentView = "courses";
+		model.hideViews();
+		model.updateViews("courses");
+      });
+      $("#j44trana4_nav2_back").click(function () {
+        //console.log("Back clicked");
+		model.currentView = "pinned";
+		model.hideViews();
+		model.updateViews("pinned");
       });
       $("#j44trana4_nav_credits").click(function () {
         //console.log("Credits clicked");
@@ -276,6 +257,7 @@ function j44trana4(userid, htmlId) {
 		model.hideViews();
 		model.updateViews("credits");
       });
+
     }
   };
 
@@ -286,9 +268,7 @@ function j44trana4(userid, htmlId) {
   var pinnedView = {
     updateView: function (msg) {
       //console.log("pinnedView.updateView with c = " + JSON.stringify(model.pinned));
-      if (msg === "error") {
-        t = templates.error;
-      } else if (msg === "pinned") {
+      if (msg === "pinned") {
 		var t = "";
 		if (model.isPinnedEmpty() === true) {
 			t = Mustache.render(templates.pinnedEmpty, model.pinned);		
@@ -307,14 +287,15 @@ function j44trana4(userid, htmlId) {
     // Initialize this object
     init: function () {
       //console.log("initializing pinnedView");
-		model.title = model.pinned.title;
+	model.title = model.pinned.title;
         $("#j44trana4_nav_title").html(model.title);
 		var t = Mustache.render(templates.pinnedEmpty, model.pinned);
-        $("#j44trana4_pinned").html(t);		
-		$("#j44trana4_pinned").on("click", "a.j44trana4_pinnedIcon", function () {
-			//console.log("Want to unpin?");
+        $("#j44trana4_pinned").html(t);
+		
+		$("#j44trana4_pinned").on("click", "div.j44trana4_pinnedIcon", function () {
+			console.log("Want to unpin?");
 			if (window.confirm("Are you sure you want to unpin this event?") === true){
-				var id = this.id.substring(1);
+				var id = this.id;
 				model.removePin(id);
 			};
 		});
@@ -327,9 +308,7 @@ function j44trana4(userid, htmlId) {
   var eventView = {
     updateView: function (msg) {
       //console.log("eventView.updateView with c = " + JSON.stringify(model.events));
-      if (msg === "error") {
-        t = templates.error;
-      } else if (msg === "events") {
+      if (msg === "events") {
         var t = Mustache.render(templates.events, model.events.data);
         $("#j44trana4_events").html(t);
 		model.title = model.events.title;
@@ -348,16 +327,16 @@ function j44trana4(userid, htmlId) {
 		model.updateViews(model.currentView);
 		model.addView(eventView.updateView);
 
-		$("#j44trana4_events").on("click", "a.j44trana4_unpinnedIcon", function () {
-			var id = this.id.substring(1);
+		$("#j44trana4_events").on("click", "div.j44trana4_unpinnedIcon", function () {
+			console.log("Want to pin?");
 			if (model.alreadyPinned(id) === false) {
-				model.addPin(model.events,id);
-				//$(this.id).css('background','url(img/pinned32.png)');
-				//$("#"+this.id).addClass("j44trana4_pinnedIcon");
-				//$("#"+this.id).removeClass("j44trana4_unpinnedIcon");
-				model.updateViews("events");
+				if (window.confirm("Are you sure you want to pin this event?") === true){
+					var id = this.id;
+					model.addPin(model.events,id);
+					model.updateViews("events");
+				}
 			} else {
-				model.alertAlreadyAdded();
+				alert("This has already been pinned!");
 			}
 		});		
     }
@@ -368,10 +347,8 @@ function j44trana4(userid, htmlId) {
 
   var sessionsView = {
     updateView: function (msg) {
-      //console.log("sessionsView.updateView with c = " + JSON.stringify(model.sessions.data));
-      if (msg === "error") {
-        t = templates.error;
-      } else if (msg === "sessions") {
+      console.log("sessionsView.updateView with c = " + JSON.stringify(model.sessions.data));
+      if (msg === "sessions") {
         var t = Mustache.render(templates.sessions, model.sessions.data);
         $("#j44trana4_sessions").html(t);
 		model.title = model.sessions.title;
@@ -390,13 +367,16 @@ function j44trana4(userid, htmlId) {
 		model.updateViews(model.currentView);
 		model.addView(sessionsView.updateView);
 
-		$("#j44trana4_sessions").on("click", "a.j44trana4_unpinnedIcon", function () {
-			var id = this.id.substring(1);
+		$("#j44trana4_sessions").on("click", "div.j44trana4_unpinnedIcon", function () {
+			console.log("Want to pin?");
 			if (model.alreadyPinned(id) === false) {
-				model.addPin(model.sessions,id);
-				model.updateViews("sessions");
+				if (window.confirm("Are you sure you want to pin this event?") === true){
+					var id = this.id;
+					model.addPin(model.sessions,id);
+					model.updateViews("sessions");
+				}
 			} else {
-				model.alertAlreadyAdded();
+				alert("This has already been pinned!");
 			}
 		});
 		
@@ -408,9 +388,10 @@ function j44trana4(userid, htmlId) {
   var creditsView = {
     updateView: function (msg) {
       //console.log("creditsView.updateView with c = " + JSON.stringify(model));
-      if (msg === "error") {
-        t = templates.error;
-      } else if (msg === "credits") {
+      if (msg === "credits") {
+      console.log("credits yes");
+        var t = Mustache.render(templates.credits, model);
+        $("#j44trana4_credits").html(t);	
 		model.title = model.credits.title;
         $("#j44trana4_nav_title").html(model.title);
         $("#j44trana4_credits").show();	
@@ -422,8 +403,6 @@ function j44trana4(userid, htmlId) {
     // Initialize this object
     init: function () {
       //console.log("initializing creditsView");
-        var t = Mustache.render(templates.credits, model.credits);
-        $("#j44trana4_credits").html(t);	
     }
   };
 
@@ -440,15 +419,20 @@ function j44trana4(userid, htmlId) {
       pinnedView.init();
       eventView.init();
       sessionsView.init();
+      coursesView.init();
       creditsView.init();
 
+
+      model.addView(navView.updateView);
       model.addView(pinnedView.updateView);
       model.addView(eventView.updateView);
       model.addView(sessionsView.updateView);
+      model.addView(coursesView.updateView);
       model.addView(creditsView.updateView);
-      model.addView(navView.updateView);
 
-      model.currentView = "pinned";
-      model.updateViews(model.currentView);
-	});
+	  model.currentView = "pinned";
+	  model.updateViews(model.currentView);
+	  
+    });
+
 }

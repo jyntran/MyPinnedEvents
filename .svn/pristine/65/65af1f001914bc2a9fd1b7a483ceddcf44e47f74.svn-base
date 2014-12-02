@@ -1,0 +1,84 @@
+baseHtml
+@@@@
+<div id='j44trana4_head' class='bar'>
+<h2 id='j44trana4_nav_title'></h2>
+</div>
+<div id='main'>
+<div id='j44trana4_pinned'></div>
+<div id='j44trana4_events'></div>
+<div id='j44trana4_sessions'></div>
+<div id='j44trana4_credits'></div>
+</div>
+<div id='j44trana4_foot' class='bar'>
+<div id='j44trana4_nav1' class='nav'>
+<button id ="j44trana4_nav1_add" type="button" class="btn btn-default btn-sm">Pin an Event</button>
+<button id="j44trana4_nav1_cal" type="button" class="btn btn-default btn-sm">My Courses</button>
+</div>
+<div id='j44trana4_nav2' class='nav'>
+<button id='j44trana4_nav2_back' type="button" class="btn btn-default btn-sm">Back</button>
+</div>
+<div id='j44trana4_nav3' class='nav'>
+<button id='j44trana4_nav_credits' type="button" class="btn btn-default btn-xs">Credits</button>
+<div>
+</div>
+
+@@@@
+pinned
+@@@@
+{{#list}}
+	<div class='j44trana4_pinned' id=''j44trana4_pinned{{id}}'>
+		<div class='j44trana4_pinnedIcon' title="Unpin this event" id='{{id}}'><a href="#" onclick="return false;"></a></div>
+		<div><b>{{{title}}}</b><p>{{{location}}}<br>{{#times}}Date: {{date}}<br>Start: {{start}}<br>End: {{end}}<br>{{/times}}<p></div>
+	</div>
+{{/list}}
+
+@@@@
+pinnedEmpty
+@@@@
+No pinned events! Why not add a few?
+
+
+@@@@
+events
+@@@@
+{{#data}}
+	<div class='j44trana4_event' id='j44trana4_event{{id}}'>
+		<div class='j44trana4_unpinnedIcon' title='Pin this event' id='{{id}}'><a href="#" onclick="return false;"></a></div>
+		<div><b>{{{title}}}</b><p>Location: {{{site_name}}}<br>{{#times}}Start: {{start}}<br>End: {{end}}<br>{{/times}}<p></div>
+	</div>
+{{/data}}
+
+@@@@
+sessions
+@@@@
+{{#data}}
+	<div class='j44trana4_session' id='j44trana4_session{{id}}'>
+		<div class='j44trana4_unpinnedIcon' title='Pin this event' id='{{id}}'><a href="#" onclick="return false;"></a></div>
+		<div><b>{{employer}} Info Session</b><p>Location: {{location}}<br>Date: {{date}}<br>Start: {{start_time}}<br>End: {{end_time}}<p></div>
+	</div>
+{{/data}}
+
+@@@@
+courses
+@@@@
+<ul>{{#terms}}
+    <li> {{term}} 
+         <ul>{{#courses}}
+             <li>{{courseId}} {{subjectCode}} {{catalog}}
+             {{/courses}}
+        </ul>
+    </li>
+    {{/terms}}
+</ul>
+
+@@@@
+error
+@@@@
+<p>ERROR: This event conflicts with your classes!</p>
+
+
+@@@@
+credits
+@@@@
+<h5>Icons</h5>
+Safety Pin designed by <a href="http://www.thenounproject.com/MisterPixel">Mister Pixel</a> from the <a href="http://www.thenounproject.com">Noun Project</a>

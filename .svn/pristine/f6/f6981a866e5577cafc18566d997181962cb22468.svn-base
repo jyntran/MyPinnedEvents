@@ -1,0 +1,8 @@
+
+#courseDescr_subject {
+	width: 50px;
+}
+
+#courseDescr_catalog {
+	width: 50px;
+}

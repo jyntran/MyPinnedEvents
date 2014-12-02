@@ -11,19 +11,19 @@ baseHtml
   <div id='j44trana4_credits'></div>
 </div>
 <div id='j44trana4_foot' class='bar'>
-  <div id='j44trana4_nav1' class='nav'>
+  <div id='j44trana4_nav' class='nav'>
     <div class="dropup">
     <ul class="nav nav-pills">
-     <li><a id="j44trana4_nav1_home" href="#" onclick="return false;" aria-expanded="false">Home</a></li>
+     <li><a id="j44trana4_nav1_home" href="#" aria-expanded="false">Home</a></li>
      <li role="presentation" class="dropdown">
-       <a class="dropdown-toggle" data-toggle="dropdown" href="#" onclick="return false;" role="button" aria-expanded="false">
+       <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
       Pin New <span class="caret"></span></a>
        <ul class="dropdown-menu" role="menu">
-     <li><a id="j44trana4_nav1_event" href="#" onclick="return false;" aria-expanded="false">Event</a></li>
-     <li><a id="j44trana4_nav1_session" href="#" onclick="return false;" aria-expanded="false">Employer Info Session</a></li>
+     <li><a id="j44trana4_nav1_event" href="#" aria-expanded="false">Event</a></li>
+     <li><a id="j44trana4_nav1_session" href="#" aria-expanded="false">Employer Info Session</a></li>
     </ul>
    </li>
-   <li><a id="j44trana4_nav_credits" href="#" onclick="return false;" aria-expanded="false">About Widget</a></li>
+   <li><a id="j44trana4_nav_credits" href="#" aria-expanded="false">About Widget</a></li>
   </ul>
  </div>
 </div>
@@ -36,6 +36,8 @@ pinned
 	<div class='j44trana4_entry j44trana4_pinned' id=''j44trana4_pinned{{id}}'>
 		<a  title="Unpin this event" id='p{{id}}' class='j44trana4_icon j44trana4_pinnedIcon' href="#" aria-expanded="false"></a>
 		<div class='j44trana4_entry_title'><b>{{{title}}}</b></div>
+<!--		<div class='j44trana4_entry_info'><p>{{#times}}Date: {{date}}<br>Start: {{start}}<br>End: {{end}}<br>{{/times}}</p><p><a href="{{link}}">More information</a></p></div>
+-->
 		<div class='j44trana4_entry_info'><p>{{#times}}Date: {{date}}<br>Time: {{time}}<br>{{/times}}</p><p><a href="{{link}}">Website</a></p></div>
 	</div>
 {{/list}}

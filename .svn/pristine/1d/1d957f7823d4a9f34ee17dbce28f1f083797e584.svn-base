@@ -1,0 +1,21 @@
+baseHtml
+@@@@
+
+<div id='j44trana4_pinned'>
+	<div><h3>Pinned Event</h3>
+		<div>pinned</div>
+		<div><h4>Pinned event</h4><p>Monday, Sept 10 2014<br>11:00AM-12:00PM<br>Tatham Centre<p></div>
+	</div>
+</div>
+<div id='j44trana4_nav'></div>
+
+@@@@
+courseD
+@@@@
+<h4>{{course.subject}} {{course.catalog_number}}: {{course.title}}</h4>
+<p>{{course.description}}</p>
+
+@@@@
+error
+@@@@
+<p>Course not found.</p>

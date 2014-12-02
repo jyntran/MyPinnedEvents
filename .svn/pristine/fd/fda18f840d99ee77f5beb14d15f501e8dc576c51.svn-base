@@ -1,0 +1,11 @@
+baseHtml
+@@@@
+<div>
+    <label>Data: <input type='text' id='storeJson_input' size='20'></label>
+    <button id='storeJson_submit'>Submit</button>
+    <button id='storeJson_clear'>Clear</button>
+</div>
+<div id='storeJson_results'>
+    <p>User Data: <span id='storeJson_userdata'></span></p>
+    <p>App Data: <span id='storeJson_appdata'></span></p>
+</div>

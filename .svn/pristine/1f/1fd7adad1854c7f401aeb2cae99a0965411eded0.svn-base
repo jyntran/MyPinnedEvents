@@ -18,12 +18,12 @@
 
 #j44trana4_head {
 	top: 0;
-	border-bottom: 5px solid #FCD450;
+	border-bottom: 2px solid yellow;
 }
 
 #j44trana4_foot {
 	bottom: 0;
-	border-top: 5px solid #FCD450;
+	border-top: 2px solid yellow;
 }
 
 #j44trana4_nav1, #j44trana4_nav2, #j44trana4_nav3 {
@@ -31,10 +31,6 @@
 	width: 100%;
 	color: black;	
 	text-align: center;
-}
-
-#j44trana4 ul.dropdown-menu {
-	background: #FCD450;
 }
 
 #j44trana4 .nav a {
@@ -75,7 +71,7 @@
 .j44trana4_icon {
 	width: 32px;
 	height: 32px;
-	margin: 3px 7px 3px 3px;
+	margin: 3px;
 	float: left;
 }
 

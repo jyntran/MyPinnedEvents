@@ -1,13 +1,12 @@
 function j44trana4(userid, htmlId) {
-	"use strict";
+  "use strict";
 
-	var templates = {};  
+  var templates = {};  
 
-	var model = {
+  var model = {
 
-	// Cookies implementation
-	// Source: http://www.quirksmode.org/js/cookies.html
-
+	// Cookies
+	
 	createCookie: function(name,value,days) {
 		if (days) {
 			var date = new Date();
@@ -33,9 +32,6 @@ function j44trana4(userid, htmlId) {
 		createCookie(name,"",-1);
 	},
 
-	
-	// Views
-
     pinned: {
 	title: "My Pinned Events",
 	list: []
@@ -55,19 +51,17 @@ function j44trana4(userid, htmlId) {
     currentView: "pinned",
     title: "My Pinned Events",
 
-	
     // Initialize this object
     init: function () {
       //console.log("initializing model");
       var that = this;
 
-	
-	// Check if user has a cookie to reload pinned list
 	var cookie = this.readCookie("j44trana4_cookie_pinned");
-	//console.log("Cookie found: " + cookie);
-	if (cookie != null) this.pinned = JSON.parse(cookie);
+	console.log(cookie);
+	if (cookie != null) this.pinned = cookie;
 
       // Initialize events
+
       $.getJSON("https://api.uwaterloo.ca/v2/events.json?key=6ed72651a0cadfd1fe73cc2048bb050e",
         function (d) {
           that.events.data = d;
@@ -79,6 +73,7 @@ function j44trana4(userid, htmlId) {
 
 
       // Initialize sessions
+
       $.getJSON("https://api.uwaterloo.ca/v2/resources/infosessions.json?key=6ed72651a0cadfd1fe73cc2048bb050e",
         function (d) {
           that.sessions.data = d;
@@ -87,9 +82,11 @@ function j44trana4(userid, htmlId) {
         	var err = textStatus + ", " + error;
         	console.log( "Request Failed: " + err );
         });
+
     },
 	
 	// Gets JSON data from id
+	
 	getById: function(type, id) {
 		var json = null;
 		var data = type.data.data;
@@ -102,16 +99,23 @@ function j44trana4(userid, htmlId) {
 		return json;
 	},
 
+
 	// Get array of times (for events)
+
 	getArrayOfTimes: function(times){
 		var result = [];
 		//console.log("test:"+JSON.stringify(times));
 		for (var i=0; i<times.length; i++) {
+			//console.log(times[i].start);
 			var startString = times[i].start;
+			//console.log(times[i].end);
 			var endString = times[i].end;
 			var date = startString.substr(0,10);
 			var start = startString.substr(11,5);
 			var end = endString.substr(11,5);
+			//console.log("date: " + date);
+			//console.log("start: " + start);
+			//console.log("end: " + end);
 			if (start === end) {
 				end = "";
 			} else {
@@ -122,13 +126,37 @@ function j44trana4(userid, htmlId) {
 		}
 		return result;
 	},
+
+	// Call alert of event added
+
+	alertAdded: function() {
+		var t = Mustache.render(templates.alertAdded, this);
+		$("#j44trana4_alert").html(t);
+	},
+
+	// Call alert of event removed
+
+	alertRemoved: function() {
+		var t = Mustache.render(templates.alertRemoved, this);
+		$("#j44trana4_alert").html(t);
+	},
+
+	// Call alert of error that warning has already been added
+
+	alertAlreadyAdded: function() {
+		var t = Mustache.render(templates.alertAlreadyAdded, this);
+		$("#j44trana4_alert").html(t);
+	},
+
 	
 	// Check if pinned list is empty
+	
 	isPinnedEmpty: function() {
 		return this.pinned.list.length === 0;
 	},
 
 	// Check if event is already pinned
+	
 	alreadyPinned: function(id){	
 		for (var i=0; i<this.pinned.list.length; i++) {
 			if ( this.pinned.list[i].id == id ){
@@ -139,7 +167,9 @@ function j44trana4(userid, htmlId) {
 	},
 	
 	// Add event to pinned list
+	
 	addPin: function(type,id) {
+		//console.log("add id: " + id);
 		var json = this.getById(type, id);
 		var newPin = {};
 		if (type === model.events) {
@@ -159,7 +189,7 @@ function j44trana4(userid, htmlId) {
 				id: json.id,
 				title: json.employer + " Info Session",
 				location: json.location,
-				times: [{ "date": json.date, "time":  json.start_time + "-" + json.end_time }],
+				times: [{ "date": json.date, "start":  json.start_time, "end" : json.end_time }],
 				link: json.website
 			};
 		}
@@ -168,11 +198,12 @@ function j44trana4(userid, htmlId) {
 		//console.log("Pinned event.");
 		newPin = "";
 
-		this.createCookie("j44trana4_cookie_pinned",JSON.stringify(this.pinned));
+		this.createcookie("j44trana4_cookie_pinned",this.pinned);
 
 	},
 	
-	// Remove event from pinned list	
+	// Remove event from pinned list
+	
 	removePin: function(id) {
 		for (var i=0; i<this.pinned.list.length; i++) {
 			if ( this.pinned.list[i].id == id ){
@@ -181,25 +212,6 @@ function j44trana4(userid, htmlId) {
 		}
 		this.alertRemoved();
 		this.updateViews("pinned");
-	},
-
-	
-	// Call alert of event added
-	alertAdded: function() {
-		var t = Mustache.render(templates.alertAdded, this);
-		$("#j44trana4_alert").html(t);
-	},
-
-	// Call alert of event removed
-	alertRemoved: function() {
-		var t = Mustache.render(templates.alertRemoved, this);
-		$("#j44trana4_alert").html(t);
-	},
-
-	// Call alert of error that warning has already been added
-	alertAlreadyAdded: function() {
-		var t = Mustache.render(templates.alertAlreadyAdded, this);
-		$("#j44trana4_alert").html(t);
 	},
 
 
@@ -232,7 +244,7 @@ function j44trana4(userid, htmlId) {
     }
 
   };
-/* end model */
+/* END MODEL */
 
 
 /* Navigation Views */
@@ -276,6 +288,7 @@ function j44trana4(userid, htmlId) {
 		model.hideViews();
 		model.updateViews("credits");
       });
+
     }
   };
 
@@ -307,7 +320,7 @@ function j44trana4(userid, htmlId) {
     // Initialize this object
     init: function () {
       //console.log("initializing pinnedView");
-		model.title = model.pinned.title;
+	model.title = model.pinned.title;
         $("#j44trana4_nav_title").html(model.title);
 		var t = Mustache.render(templates.pinnedEmpty, model.pinned);
         $("#j44trana4_pinned").html(t);		
@@ -410,7 +423,9 @@ function j44trana4(userid, htmlId) {
       //console.log("creditsView.updateView with c = " + JSON.stringify(model));
       if (msg === "error") {
         t = templates.error;
-      } else if (msg === "credits") {
+      } if (msg === "credits") {
+        var t = Mustache.render(templates.credits, model);
+        $("#j44trana4_credits").html(t);	
 		model.title = model.credits.title;
         $("#j44trana4_nav_title").html(model.title);
         $("#j44trana4_credits").show();	
@@ -422,8 +437,6 @@ function j44trana4(userid, htmlId) {
     // Initialize this object
     init: function () {
       //console.log("initializing creditsView");
-        var t = Mustache.render(templates.credits, model.credits);
-        $("#j44trana4_credits").html(t);	
     }
   };
 
@@ -448,7 +461,8 @@ function j44trana4(userid, htmlId) {
       model.addView(creditsView.updateView);
       model.addView(navView.updateView);
 
-      model.currentView = "pinned";
-      model.updateViews(model.currentView);
+    model.currentView = "pinned";
+    model.updateViews(model.currentView);
+	
 	});
 }

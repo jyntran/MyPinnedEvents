@@ -1,0 +1,80 @@
+
+
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+    		<meta charset="utf-8"/>
+        <title>CS349 Portal</title>
+		
+        <script src="js/jquery-1.11.1.min.js" type="text/javascript"></script>
+        
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" media="screen" href="css/bootstrap.css">
+        <link rel="stylesheet" media="screen" href="css/bootstrap-theme.css">
+        <script src="js/bootstrap.min.js" type="text/javascript"></script>
+        
+        <script src="js/mustache.js" type="text/javascript"></script>
+        <script src="js/portal.js" type="text/javascript"></script>
+        
+        
+        <link rel="stylesheet" media="screen" href="css/main.css">
+        <link rel="shortcut icon" type="image/png" href="images/favicon.png">
+    </head>
+    <body>
+<h3>Warning:  Widgets may behave differently in this page than in the actual portal.  Test early
+and test often in the actual portal.</h3>
+        <div class="container-fluid">
+        
+  <div class="row">
+  	<h1>CS349 Portal</h1>
+  	<div class="pull-left">Your User Name</div>  <div class="pull-right"><a href="/admin">Admin</a></div>
+  </div>
+    
+  
+
+	 
+	   <div class="row">
+		    	<div class="col-md-4 cell" id="j44trana4_background">
+		    	  <div id="j44trana4"></div>
+		    	</div>
+	   	 
+		    	<div class="col-md-4 cell" id="courseDescr_background">
+		    	  <div id="courseDescr"></div>
+		    	</div>
+	   	 
+		    	<div class="col-md-4 cell" id="stdCrsHist_background">
+		    	  <div id="stdCrsHist"></div>
+		    	</div>
+	   	 
+    	    	
+    </div>
+        <link rel="stylesheet" media="screen" href="widgets/j44trana4/j44trana4.css">
+  	<script src="widgets/j44trana4/j44trana4.js" type="text/javascript"></script>
+        <link rel="stylesheet" media="screen" href="widgets/courseDescr/courseDescr.css">
+	<script src="widgets/courseDescr/courseDescr.js" type="text/javascript"></script>
+        <link rel="stylesheet" media="screen" href="widgets/stdCrsHist/stdCrsHist.css">
+	<script src="widgets/stdCrsHist/stdCrsHist.js" type="text/javascript"></script>
+    
+    <script>
+    var server = "cs349.student.cs.uwaterloo.ca:9410"
+
+    $(document).ready(function() {
+    	
+    		courseDescr("j44tran", "#courseDescr")
+    	
+    		stdCrsHist("j44tran", "#stdCrsHist")
+
+    		j44trana4("j44tran", "#j44trana4")
+    	
+    });
+    </script>
+  
+
+
+    </div></body>
+</html>
+
